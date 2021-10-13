@@ -15,9 +15,7 @@ use App\Models\Company;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [CompanyController::class, 'index'])->name('company.index');
 
 Route::group(['prefix' => 'employees'], function(){
    Route::get('', [EmployeeController::class, 'index'])->name('employee.index')->middleware('auth');
@@ -35,4 +33,4 @@ Route::group(['prefix' => 'companies'], function(){
 
 Auth::routes(['register' => false]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [CompanyController::class, 'index'])->name('company.index');
