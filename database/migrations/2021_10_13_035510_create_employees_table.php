@@ -18,6 +18,8 @@ class CreateEmployeesTable extends Migration
             $table->string('name', 20);
             $table->string('surname', 20);
             $table->integer('age');
+            $table->unsignedBigInteger('company_id');
+            $table->foreign('company_id')->references('id')->on('companies');
             $table->timestamps();
         });
     }

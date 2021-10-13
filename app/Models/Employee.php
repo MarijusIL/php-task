@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Employee extends Model
 {
     use HasFactory;
+    
+    public function getCompany()
+    {
+       return $this->belongsTo('App\Models\Company', 'company_id', 'id');
+    }
+
 }

@@ -14,7 +14,10 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        //
+        $compId = auth()-user()->company_id;
+        $employees = Employee::where('company_id', $compId)->get();
+        
+        return view('book.index', ['employees' => $books]);
     }
 
     /**
@@ -24,7 +27,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        //
+        return view('employee.create');
     }
 
     /**
@@ -35,7 +38,13 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $employee = new Employee;
+        $employee->name = $request->employee_name;
+        $employee->surname = $request->employee_surname;
+        $employee->age = $request->employee_age;
+        $employee->company_id = auth()-user()->company_id;
+        $employee->save();
+        return redirect()->route('employee.index');
     }
 
     /**
@@ -80,6 +89,7 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee)
     {
-        //
+        $employee->delete();
+        return redirect()->route('employee.index');
     }
 }
