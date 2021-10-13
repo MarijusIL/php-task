@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Employee;
+use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Validator;
 
 class EmployeeController extends Controller
 {
@@ -14,10 +17,10 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $compId = auth()-user()->company_id;
+        $compId = Auth::user()->company_id;
         $employees = Employee::where('company_id', $compId)->get();
-        
-        return view('book.index', ['employees' => $books]);
+        $company_name = (Company::where('id', $compId)->get())[0]->name;
+        return view('employee.index', ['employees' => $employees, 'company' => $company_name]);
     }
 
     /**
@@ -38,11 +41,21 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(),
+        [
+           'employee_name' => ['required', 'min:3', 'max:40'],
+           'employee_surname' => ['required', 'min:3', 'max:40'],
+           'employee_age' => ['required', 'integer', 'min:18', 'max:99'],
+        ],
+        );
+        if ($validator->fails()) {
+           return redirect()->back();
+        }
         $employee = new Employee;
         $employee->name = $request->employee_name;
         $employee->surname = $request->employee_surname;
         $employee->age = $request->employee_age;
-        $employee->company_id = auth()-user()->company_id;
+        $employee->company_id = Auth::user()->company_id;
         $employee->save();
         return redirect()->route('employee.index');
     }

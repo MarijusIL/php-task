@@ -33,6 +33,6 @@ Route::group(['prefix' => 'companies'], function(){
    Route::get('show/{company}', [CompanyController::class, 'show'])->name('company.show');
 });
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
